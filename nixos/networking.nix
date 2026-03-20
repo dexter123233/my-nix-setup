@@ -1,14 +1,6 @@
-{ inputs, ... }:
+{ lib, ... }:
 
 {
-  options = {
-    networking.hostName = lib.mkOption {
-      type = lib.types.str;
-      default = "nixos";
-      description = "Hostname of the machine";
-    };
-  };
-
   config = {
     networking.hostName = "nixos";
     networking.networkmanager.enable = true;

@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ pkgs, ... }:
 
 {
   config = {
@@ -13,13 +13,12 @@
       docs.enable = false;
     };
 
-    environment.systemPackages = with inputs.nixpkgs.legacyPackages.x86_64-linux; [
-      inputs.home-manager.packages.x86_64-linux.default
+    environment.systemPackages = with pkgs; [
+      home-manager
     ];
 
     virtualisation.docker.enable = true;
 
-    # Automatic garbage collection (dendritic best practice)
     nix.gc = {
       automatic = true;
       dates = "weekly";

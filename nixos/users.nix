@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ pkgs, ... }:
 
 {
   config = {
@@ -6,7 +6,7 @@
       isNormalUser = true;
       description = "Arx";
       extraGroups = [ "networkmanager" "wheel" "docker" ];
-      packages = with inputs.nixpkgs.legacyPackages.x86_64-linux; [
+      packages = with pkgs; [
         google-chrome
         onboard
         zapzap
