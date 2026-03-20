@@ -1,4 +1,4 @@
-{ inputs, ... }:
+{ inputs, pkgs, ... }:
 
 {
   config = {
@@ -28,5 +28,9 @@
 
     services.gnome.gnome-keyring.enable = true;
     security.pam.services.login.enableGnomeKeyring = true;
+
+    environment.systemPackages = with pkgs; [
+      telegram-desktop
+    ];
   };
 }
