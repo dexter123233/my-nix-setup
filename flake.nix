@@ -1,45 +1,28 @@
 {
-  description = "Arx's NixOS Configuration - Dendritic Pattern";
-
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-openclaw.url = "github:openclaw/nix-openclaw";
   };
 
-  outputs = inputs @ { self, nixpkgs, home-manager, ... }:
-    let
-      lib = nixpkgs.lib;
-    in
-    {
-      inherit lib;
-
-      nixosConfigurations.nixos = lib.nixosSystem {
-        system = "x86_64-linux";
-        modules = [
-          home-manager.nixosModules.home-manager
-          ./nixos
-          ./hosts/hardware-configuration.nix
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-
-            home-manager.users.arx = {
-              home = {
-                username = "arx";
-                homeDirectory = "/home/arx";
-                stateVersion = "26.05";
-              };
-
-              home.sessionVariables = {
-                ANTHROPIC_API_KEY_FILE = "/home/arx/.secrets/anthropic-api-key";
-              };
-            };
-          }
-        ];
-      };
+  outputs = { self, nixpkgs, home-manager, nix-openclaw }: {
+    nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        ./configuration.nix
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.sharedModules = [
+            nix-openclaw.homeManagerModules.openclaw
+          ];
+          home-manager.users.arx = import ./home.nix;
+        }
+      ];
     };
+  };
 }
